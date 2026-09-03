@@ -1,0 +1,22 @@
+.star-rating {
+  display: inline-flex;
+  gap: 0.12em;
+  line-height: 1;
+}
+
+.star-rating__slot {
+  position: relative;
+  display: inline-block;
+}
+
+.star-rating__base {
+  color: rgba(154, 148, 134, 0.35);
+}
+
+.star-rating__fill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--gold-bright);
+}

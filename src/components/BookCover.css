@@ -1,0 +1,59 @@
+.book-cover {
+  display: block;
+  width: 100%;
+}
+
+.book-cover__stand {
+  position: relative;
+}
+
+.book-cover__shadow {
+  height: 16px;
+  margin: -4px 10% 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.2) 45%,
+    transparent 75%
+  );
+  filter: blur(2px);
+  transition: opacity 0.25s ease;
+}
+
+.book-cover:hover .book-cover__shadow {
+  opacity: 0.7;
+}
+
+.book-cover__frame {
+  border-radius: 3px;
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow 0.25s ease;
+}
+
+.book-cover:hover .book-cover__frame,
+.book-cover:focus-visible .book-cover__frame {
+  box-shadow: 0 20px 40px -16px rgba(184, 147, 90, 0.35), var(--shadow-deep);
+}
+
+.book-cover__image {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 3px;
+  display: block;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+
+.book-cover__title {
+  margin: 0.9rem 0 0.15rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+
+.book-cover__author {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+}
