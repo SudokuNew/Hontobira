@@ -87,3 +87,7 @@ export const books = [
 ];
 
 export const getBookById = (id) => books.find((b) => b.id === id);
+export const coverUrl = (path) => {
+  if (!path) return null;
+  return `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
+};
