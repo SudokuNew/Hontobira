@@ -15,7 +15,7 @@ export default function BookCover({ book }) {
         >
           {book.coverImage ? (
             <img
-              src={book.coverImage}
+              src={coverUrl(book.coverImage)}
               alt={`${book.title} の表紙`}
               className="book-cover__image"
             />
