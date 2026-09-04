@@ -2,7 +2,7 @@ import { Link, useParams, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import GeneratedCover from "../components/GeneratedCover";
 import StarRating from "../components/StarRating";
-import { getBookById } from "../data/books";
+import { getBookById, coverUrl } from "../data/books";
 
 const pageTransition = {
   initial: { opacity: 0, y: 16 },
@@ -29,7 +29,7 @@ export default function BookDetail() {
           <motion.div className="detail__cover-frame" layoutId={`cover-${book.id}`}>
             {book.coverImage ? (
               <img
-                src={book.coverImage}
+                src={coverUrl(book.coverImage)}
                 alt={`${book.title} の表紙`}
                 className="detail__cover-image"
               />
