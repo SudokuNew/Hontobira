@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import GeneratedCover from "./GeneratedCover";
+import { coverUrl } from "../data/books";
 
 export default function BookCover({ book }) {
   return (
