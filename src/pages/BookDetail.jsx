@@ -1,5 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import GeneratedCover from "../components/GeneratedCover";
 import StarRating from "../components/StarRating";
 import { getBookById, coverUrl } from "../data/books";
@@ -13,8 +14,36 @@ const pageTransition = {
 export default function BookDetail() {
   const { id } = useParams();
   const book = getBookById(id);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  // Esc キーで閉じる／開いている間は背景のスクロールを止める。
+  // 本の追加・削除に関わらず常に有効なので、新しく本を足しても自動的にこの挙動を継承します。
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setLightboxOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [lightboxOpen]);
 
   if (!book) return <Navigate to="/" replace />;
+
+  const renderCoverArt = (className) =>
+    book.coverImage ? (
+      <img
+        src={coverUrl(book.coverImage)}
+        alt={`${book.title} の表紙`}
+        className={className}
+      />
+    ) : (
+      <GeneratedCover title={book.title} author={book.author} accent={book.accent} />
+    );
 
   return (
     <div className="detail">
@@ -27,15 +56,18 @@ export default function BookDetail() {
       <div className="detail__layout">
         <div className="detail__cover-col">
           <motion.div className="detail__cover-frame" layoutId={`cover-${book.id}`}>
-            {book.coverImage ? (
-              <img
-                src={coverUrl(book.coverImage)}
-                alt={`${book.title} の表紙`}
-                className="detail__cover-image"
-              />
-            ) : (
-              <GeneratedCover title={book.title} author={book.author} accent={book.accent} />
-            )}
+            <motion.button
+              type="button"
+              className="detail__cover-trigger"
+              layoutId={`cover-image-${book.id}`}
+              onClick={() => setLightboxOpen(true)}
+              aria-label={`${book.title} の表紙を拡大表示`}
+              whileHover={{ scale: 1.015 }}
+              whileTap={{ scale: 0.985 }}
+              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+            >
+              {renderCoverArt("detail__cover-image")}
+            </motion.button>
             <div className="detail__cover-glow" aria-hidden="true" />
           </motion.div>
         </div>
@@ -87,6 +119,40 @@ export default function BookDetail() {
           </section>
         </motion.div>
       </div>
+
+      <AnimatePresence>
+        {lightboxOpen && (
+          <motion.div
+            className="lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.28 }}
+            onClick={() => setLightboxOpen(false)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${book.title} の表紙 拡大表示`}
+          >
+            <motion.button
+              type="button"
+              className="lightbox__close"
+              onClick={() => setLightboxOpen(false)}
+              aria-label="閉じる"
+            >
+              ✕ 閉じる
+            </motion.button>
+
+            <motion.div
+              className="lightbox__frame"
+              layoutId={`cover-image-${book.id}`}
+              transition={{ type: "spring", stiffness: 240, damping: 26 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {renderCoverArt("lightbox__image")}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
