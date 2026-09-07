@@ -1,8 +1,44 @@
-import { motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import BookCover from "../components/BookCover";
+import ShelfControls from "../components/ShelfControls";
 import { books } from "../data/books";
+import {
+  EMPTY_FILTERS,
+  filterBooks,
+  getFacets,
+  getPriceBuckets,
+  searchBooks,
+  sortBooks,
+} from "../utils/bookQuery";
 
 export default function Home() {
+  const [query, setQuery] = useState("");
+  const [sortKey, setSortKey] = useState("default");
+  const [filters, setFilters] = useState(EMPTY_FILTERS);
+  const [filterOpen, setFilterOpen] = useState(false);
+
+  const facets = useMemo(() => getFacets(books), []);
+  const priceBuckets = useMemo(() => getPriceBuckets(facets), [facets]);
+
+  const visibleBooks = useMemo(() => {
+    const filtered = filterBooks(books, filters);
+    return query.trim() ? searchBooks(filtered, query) : sortBooks(filtered, sortKey);
+  }, [query, sortKey, filters]);
+
+  const isSearching = query.trim().length > 0;
+
+  const resultLabel = isSearching
+    ? `「${query.trim()}」の検索結果 ${visibleBooks.length}件`
+    : visibleBooks.length === books.length
+    ? `蔵書 ${books.length}冊`
+    : `${visibleBooks.length} / ${books.length}冊を表示中`;
+
+  const handleReset = () => {
+    setFilters(EMPTY_FILTERS);
+    setQuery("");
+  };
+
   return (
     <div className="home">
       <header className="home__hero">
@@ -34,14 +70,46 @@ export default function Home() {
       </header>
 
       <main>
-        <div className="home__shelf-label">
-          <span>蔵書 {books.length} 冊</span>
-        </div>
-        <div className="shelf-grid">
-          {books.map((book) => (
-            <BookCover key={book.id} book={book} />
-          ))}
-        </div>
+        <ShelfControls
+          query={query}
+          onQueryChange={setQuery}
+          sortKey={sortKey}
+          onSortChange={setSortKey}
+          filters={filters}
+          onFiltersChange={setFilters}
+          filterOpen={filterOpen}
+          onToggleFilterOpen={() => setFilterOpen((v) => !v)}
+          facets={facets}
+          priceBuckets={priceBuckets}
+          resultLabel={resultLabel}
+          onReset={handleReset}
+        />
+
+        {visibleBooks.length > 0 ? (
+          <motion.div className="shelf-grid" layout>
+            <AnimatePresence mode="popLayout">
+              {visibleBooks.map((book) => (
+                <motion.div
+                  key={book.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.94 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.94 }}
+                  transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                >
+                  <BookCover book={book} />
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        ) : (
+          <div className="shelf-empty">
+            <p>条件に合う本が見つかりませんでした。</p>
+            <button type="button" className="shelf-empty__reset" onClick={handleReset}>
+              条件をリセットする
+            </button>
+          </div>
+        )}
       </main>
 
       <footer className="home__footer">

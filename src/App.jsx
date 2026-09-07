@@ -7,6 +7,7 @@ import "./pages/BookDetail.css";
 import "./components/BookCover.css";
 import "./components/GeneratedCover.css";
 import "./components/StarRating.css";
+import "./components/ShelfControls.css";
 
 export default function App() {
   const location = useLocation();
