@@ -5,6 +5,8 @@
 }
 
 .detail__top {
+  position: relative;
+  z-index: 5;
   margin-bottom: clamp(2rem, 5vw, 3.5rem);
 }
 
@@ -25,17 +27,23 @@
   gap: 2.5rem;
 }
 
+.detail__cover-col {
+  position: static;
+}
+
 @media (min-width: 800px) {
   .detail__layout {
     grid-template-columns: minmax(220px, 300px) 1fr;
     gap: clamp(3rem, 6vw, 5rem);
     align-items: start;
   }
-}
 
-.detail__cover-col {
-  position: sticky;
-  top: 2.5rem;
+  /* PC(2カラムレイアウト)のときだけ表紙を追従させる。
+     スマホでは縦積みレイアウトになり、追従させると本文がずっと読めなくなるため無効化する。 */
+  .detail__cover-col {
+    position: sticky;
+    top: 2.5rem;
+  }
 }
 
 .detail__cover-frame {
@@ -58,12 +66,14 @@
   position: absolute;
   inset: -18%;
   z-index: -1;
+  /* その本の accent 色をほんのり滲ませる。指定がなければ通常のゴールドに戻る。 */
   background: radial-gradient(
     ellipse at 50% 40%,
-    rgba(184, 147, 90, 0.22),
+    var(--book-accent, var(--gold)),
     transparent 70%
   );
-  filter: blur(8px);
+  opacity: 0.32;
+  filter: blur(10px);
 }
 
 .detail__eyebrow {
@@ -169,7 +179,7 @@
 .detail__section--review {
   padding: 1.8rem 2rem;
   background: var(--bg-panel);
-  border-left: 2px solid var(--gold-dim);
+  border-left: 2px solid var(--book-accent, var(--gold-dim));
   border-radius: 2px;
 }
 

@@ -7,6 +7,23 @@
   position: relative;
 }
 
+.book-cover__glow {
+  position: absolute;
+  inset: -12%;
+  z-index: -1;
+  border-radius: 8px;
+  /* その本の accent 色を、ホバーした時だけそっと滲ませる */
+  background: radial-gradient(ellipse at 50% 35%, var(--book-accent, var(--gold)), transparent 72%);
+  opacity: 0;
+  filter: blur(16px);
+  transition: opacity 0.3s ease;
+}
+
+.book-cover:hover .book-cover__glow,
+.book-cover:focus-visible .book-cover__glow {
+  opacity: 0.4;
+}
+
 .book-cover__shadow {
   height: 16px;
   margin: -4px 10% 0;
