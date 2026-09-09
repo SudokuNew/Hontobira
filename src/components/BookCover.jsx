@@ -5,14 +5,8 @@ import { coverUrl } from "../data/books";
 
 export default function BookCover({ book }) {
   return (
-    <Link
-      to={`/book/${book.id}`}
-      className="book-cover"
-      style={{ "--book-accent": book.accent }}
-      aria-label={`${book.title} — 詳細を見る`}
-    >
+    <Link to={`/book/${book.id}`} className="book-cover" aria-label={`${book.title} — 詳細を見る`}>
       <div className="book-cover__stand">
-        <div className="book-cover__glow" aria-hidden="true" />
         <motion.div
           className="book-cover__frame"
           layoutId={`cover-${book.id}`}

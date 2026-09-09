@@ -66,14 +66,12 @@
   position: absolute;
   inset: -18%;
   z-index: -1;
-  /* その本の accent 色をほんのり滲ませる。指定がなければ通常のゴールドに戻る。 */
   background: radial-gradient(
     ellipse at 50% 40%,
-    var(--book-accent, var(--gold)),
+    rgba(184, 147, 90, 0.22),
     transparent 70%
   );
-  opacity: 0.32;
-  filter: blur(10px);
+  filter: blur(8px);
 }
 
 .detail__eyebrow {
@@ -179,7 +177,7 @@
 .detail__section--review {
   padding: 1.8rem 2rem;
   background: var(--bg-panel);
-  border-left: 2px solid var(--book-accent, var(--gold-dim));
+  border-left: 2px solid var(--gold-dim);
   border-radius: 2px;
 }
 

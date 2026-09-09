@@ -46,7 +46,7 @@ export default function BookDetail() {
     );
 
   return (
-    <div className="detail" style={{ "--book-accent": book.accent }}>
+    <div className="detail">
       <div className="detail__top">
         <Link to="/" className="detail__back">
           ← 書架にもどる
