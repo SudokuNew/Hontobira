@@ -137,7 +137,7 @@ export const books = [
     author: "緒乃ワサビ",
     year: 2024,
     publisher: "新潮文庫nex",
-    price: 710
+    price: 710,
     rating: 5,
     tags: ["感動", "青春", "恋愛", "愛", "清純", "純粋", "時を越えた愛", "SF", "天才", "個性派"],
     accent: "#faf4e6",
